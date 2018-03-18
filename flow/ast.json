@@ -1,0 +1,70 @@
+{
+  "type": 1,
+  "tag": "div",
+  "attrsList": [
+    {
+      "name": "id",
+      "value": "app"
+    }
+  ],
+  "attrsMap": {
+    "id": "app"
+  },
+  "children": [
+    {
+      "type": 2,
+      "expression": "\"\\n  \"+_s(message)+\"\\n  \"",
+      "text": "\n  {{ message }}\n  ",
+      "static": false
+    },
+    {
+      "type": 1,
+      "tag": "input",
+      "attrsList": [
+        {
+          "name": "v-model",
+          "value": "message"
+        }
+      ],
+      "attrsMap": {
+        "v-model": "message"
+      },
+      "parent": "[Circular root]",
+      "children": [
+        
+      ],
+      "plain": false,
+      "hasBindings": true,
+      "directives": [
+        {
+          "name": "model",
+          "rawName": "v-model",
+          "value": "message"
+        }
+      ],
+      "static": false,
+      "staticRoot": false,
+      "props": [
+        {
+          "name": "value",
+          "value": "(message)"
+        }
+      ],
+      "events": {
+        "input": {
+          "value": "if($event.target.composing)return;message=$event.target.value",
+          "modifiers": null
+        }
+      }
+    }
+  ],
+  "plain": false,
+  "attrs": [
+    {
+      "name": "id",
+      "value": "\"app\""
+    }
+  ],
+  "static": false,
+  "staticRoot": false
+}
