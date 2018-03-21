@@ -9130,7 +9130,7 @@ Vue$3.prototype.$mount = function (
         return this
       }
     } else if (el) {
-      template = getOuterHTML(el); // 获取模版
+      template = getOuterHTML(el);
     }
     if (template) {
       /* istanbul ignore if */
