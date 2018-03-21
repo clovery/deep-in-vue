@@ -53,7 +53,7 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
-      template = getOuterHTML(el)
+      template = getOuterHTML(el) // 通过 dom 节点获取模版
     }
     if (template) {
       /* istanbul ignore if */
@@ -67,7 +67,7 @@ Vue.prototype.$mount = function (
       }, this)
       options.render = render
       options.staticRenderFns = staticRenderFns
-
+      // 编译模版，返回 render 方法，并且挂载到 $options 对象上
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && perf) {
         perf.mark('compile end')

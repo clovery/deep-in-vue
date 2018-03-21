@@ -50,7 +50,7 @@ const targetStack = []
 
 export function pushTarget (_target: Watcher) {
   if (Dep.target) targetStack.push(Dep.target)
-  Dep.target = _target
+  Dep.target = _target // 指向当前 watcher 对象
 }
 
 export function popTarget () {
