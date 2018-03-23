@@ -9,3 +9,9 @@ initComputed(vm, computed) -> defineComputed(vm, key, userDef) -> createComputed
 依赖收集
 
 计算属性执行 getter 时，设置成当前依赖，取依赖属性时，触发依赖属性的取值方法，这时，记录依赖该属性的依赖者，从而当属性改变的时候，notify 依赖者。
+
+## Resources
+
+[Vue.js Internals: How computed properties work](https://skyronic.com/blog/vuejs-internals-computed-properties)
+
+
