@@ -26,7 +26,7 @@ export function parseText (
   while ((match = tagRE.exec(text))) {
     index = match.index
     // push text token
-    if (index > lastIndex) {
+    if (index > lastIndex) { // token 之前的文本
       tokens.push(JSON.stringify(text.slice(lastIndex, index)))
     }
     // tag token
@@ -34,7 +34,7 @@ export function parseText (
     tokens.push(`_s(${exp})`)
     lastIndex = index + match[0].length
   }
-  if (lastIndex < text.length) {
+  if (lastIndex < text.length) { // token 之后的文本
     tokens.push(JSON.stringify(text.slice(lastIndex)))
   }
   return tokens.join('+')

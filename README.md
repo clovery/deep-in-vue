@@ -1,3 +1,3 @@
 # Vue Note
 
-Base on Vue.js versio 2.2.0
+Base on Vue.js version 2.2.0

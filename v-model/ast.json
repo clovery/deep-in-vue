@@ -1,0 +1,42 @@
+{
+  "type": 1,
+  "tag": "div",
+  "attrsList": [{
+    "name": "id",
+    "value": "app"
+  }],
+  "attrsMap": {
+    "id": "app"
+  },
+  "children": [{
+      "type": 2,
+      "expression": "\"\\n  \"+_s(message)+\"\\n  \"",
+      "text": "\n  {{ message }}\n  "
+    },
+    {
+      "type": 1,
+      "tag": "input",
+      "attrsList": [{
+        "name": "v-model",
+        "value": "message"
+      }],
+      "attrsMap": {
+        "v-model": "message"
+      },
+      "parent": "[Circular ~]",
+      "children": [],
+      "plain": false,
+      "hasBindings": true,
+      "directives": [{
+        "name": "model",
+        "rawName": "v-model",
+        "value": "message"
+      }]
+    }
+  ],
+  "plain": false,
+  "attrs": [{
+    "name": "id",
+    "value": "\"app\""
+  }]
+}
