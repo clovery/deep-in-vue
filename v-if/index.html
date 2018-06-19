@@ -5,13 +5,19 @@
 </head>
 <body>
 <div id="app">
-  {{ message }}
+  <div v-if="visible">{{ message }}</div>
 </div>
 <script src="../vue/dist/vue.js"></script>
 <script>
-  const app = document.querySelector('#app')
-  const html = app.outerHTML
-  console.log(Vue.compile(html))
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        visible: true,
+        message: 'Hello Vue!'
+      }
+    }
+  })
 </script>
 </body>
 </html>

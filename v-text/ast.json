@@ -1,0 +1,46 @@
+{
+  "type": 1,
+  "tag": "div",
+  "attrsList": [
+    {
+      "name": "id",
+      "value": "app"
+    }
+  ],
+  "attrsMap": {
+    "id": "app"
+  },
+  "children": [
+    {
+      "type": 1,
+      "tag": "span",
+      "attrsList": [
+        {
+          "name": "v-text",
+          "value": "message"
+        }
+      ],
+      "attrsMap": {
+        "v-text": "message"
+      },
+      "parent": "[Circular ~]",
+      "children": [],
+      "plain": false,
+      "hasBindings": true,
+      "directives": [
+        {
+          "name": "text",
+          "rawName": "v-text",
+          "value": "message"
+        }
+      ]
+    }
+  ],
+  "plain": false,
+  "attrs": [
+    {
+      "name": "id",
+      "value": "\"app\""
+    }
+  ]
+}

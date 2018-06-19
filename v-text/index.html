@@ -5,13 +5,16 @@
 </head>
 <body>
 <div id="app">
-  {{ message }}
+  <span v-text="message"></span>
 </div>
 <script src="../vue/dist/vue.js"></script>
 <script>
-  const app = document.querySelector('#app')
-  const html = app.outerHTML
-  console.log(Vue.compile(html))
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
 </script>
 </body>
 </html>

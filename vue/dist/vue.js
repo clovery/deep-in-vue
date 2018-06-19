@@ -2404,6 +2404,7 @@ var Watcher = function Watcher (
  * Evaluate the getter, and re-collect dependencies.
  */
 Watcher.prototype.get = function get () {
+  console.log(this)
   pushTarget(this);
   var value;
   var vm = this.vm;
@@ -3518,6 +3519,7 @@ function renderMixin (Vue) {
     // render self
     var vnode;
     try {
+      // 调用生成的 render 方法
       vnode = render.call(vm._renderProxy, vm.$createElement);
     } catch (e) {
       handleError(e, vm, "render function");
@@ -4492,6 +4494,7 @@ function createPatchFunction (backend) {
           );
         }
       }
+      // 此时返回的是节点，并没有填充数据
       vnode.elm = vnode.ns
         ? nodeOps.createElementNS(vnode.ns, tag)
         : nodeOps.createElement(tag, vnode);
@@ -4499,10 +4502,12 @@ function createPatchFunction (backend) {
 
       /* istanbul ignore if */
       {
+        // 创建子节点
         createChildren(vnode, children, insertedVnodeQueue);
-        if (isDef(data)) {
+        if (isDef(data)) { // 判断 vnode 是否有 data 数据
           invokeCreateHooks(vnode, insertedVnodeQueue);
         }
+        // 插入节点
         insert(parentElm, vnode.elm, refElm);
       }
 
@@ -4606,6 +4611,18 @@ function createPatchFunction (backend) {
   }
 
   function invokeCreateHooks (vnode, insertedVnodeQueue) {
+    /*
+    cbs.create: [
+      updateAttrs
+      updateClass
+      updateDOMListeners
+      updateDOMProps
+      updateStyle
+      _enter
+      create
+      updateDirectives
+    ]
+    */
     for (var i$1 = 0; i$1 < cbs.create.length; ++i$1) {
       cbs.create[i$1](emptyNode, vnode);
     }
@@ -4925,6 +4942,7 @@ function createPatchFunction (backend) {
       isInitialPatch = true;
       createElm(vnode, insertedVnodeQueue, parentElm, refElm);
     } else {
+      // 判断是否是 dom 元素
       var isRealElement = isDef(oldVnode.nodeType);
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
         // patch existing root node
@@ -4958,7 +4976,8 @@ function createPatchFunction (backend) {
         }
         // replacing existing element
         var oldElm = oldVnode.elm;
-        var parentElm$1 = nodeOps.parentNode(oldElm);
+        var parentElm$1 = nodeOps.parentNode(oldElm); // 获取父节点
+        // 创建实际的 dom 
         createElm(
           vnode,
           insertedVnodeQueue,
@@ -5855,7 +5874,7 @@ function updateDOMProps (oldVnode, vnode) {
         elm.value = strCur;
       }
     } else {
-      elm[key] = cur;
+      elm[key] = cur; // 直接更新 dom props
     }
   }
 }
@@ -6593,7 +6612,6 @@ var platformModules = [
 // the directive module should be applied last, after all
 // built-in modules have been applied.
 var modules = platformModules.concat(baseModules);
-
 var patch = createPatchFunction({ nodeOps: nodeOps, modules: modules });
 
 /**
@@ -7749,6 +7767,7 @@ function parse (
           currentParent.plain = false;
           var name = element.slotTarget || '"default"';(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
         } else {
+          // push 子元素到 children
           currentParent.children.push(element);
           element.parent = currentParent;
         }
@@ -8024,6 +8043,7 @@ function processAttrs (el) {
         if (argMatch && (arg = argMatch[1])) {
           name = name.slice(0, -(arg.length + 1));
         }
+        // 添加指令到 el.directives
         addDirective(el, name, rawName, value, arg, modifiers);
         if ("development" !== 'production' && name === 'model') {
           checkForAliasModel(el, value);
@@ -8578,11 +8598,12 @@ function genDirectives (el) {
   for (i = 0, l = dirs.length; i < l; i++) {
     dir = dirs[i];
     needRuntime = true;
+    // 获取指令对应的生成方法
     var gen = platformDirectives$1[dir.name] || baseDirectives[dir.name];
     if (gen) {
       // compile-time directive that manipulates AST.
       // returns true if it also needs a runtime counterpart.
-      needRuntime = !!gen(el, dir, warn$3);
+      needRuntime = !!gen(el, dir, warn$3); // 此处修改了 el 对象
     }
     if (needRuntime) {
       hasRuntime = true;
