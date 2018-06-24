@@ -13,6 +13,7 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+// 重写公共的 $mount 方法，之前的方法定义在 ./web-runtime.js 中
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
