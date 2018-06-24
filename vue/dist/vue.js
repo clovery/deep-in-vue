@@ -623,6 +623,7 @@ var Dep = function Dep () {
 };
 
 Dep.prototype.addSub = function addSub (sub) {
+  // 添加接收者
   this.subs.push(sub);
 };
 
@@ -632,6 +633,7 @@ Dep.prototype.removeSub = function removeSub (sub) {
 
 Dep.prototype.depend = function depend () {
   if (Dep.target) {
+    // 判断是否有 watcher，添加 dep 依赖
     Dep.target.addDep(this);
   }
 };
@@ -640,7 +642,7 @@ Dep.prototype.notify = function notify () {
   // stablize the subscriber list first
   var subs = this.subs.slice();
   for (var i = 0, l = subs.length; i < l; i++) {
-    subs[i].update();
+    subs[i].update(); // 调用 watcher.update
   }
 };
 
@@ -843,7 +845,7 @@ function defineReactive$$1 (
     configurable: true,
     get: function reactiveGetter () {
       var value = getter ? getter.call(obj) : val;
-      if (Dep.target) {
+      if (Dep.target) { // 收集依赖
         dep.depend();
         if (childOb) {
           childOb.dep.depend();
@@ -2404,7 +2406,6 @@ var Watcher = function Watcher (
  * Evaluate the getter, and re-collect dependencies.
  */
 Watcher.prototype.get = function get () {
-  console.log(this)
   pushTarget(this);
   var value;
   var vm = this.vm;
@@ -2415,7 +2416,7 @@ Watcher.prototype.get = function get () {
       handleError(e, vm, ("getter for watcher \"" + (this.expression) + "\""));
     }
   } else {
-    value = this.getter.call(vm, vm);
+    value = this.getter.call(vm, vm); // 调用 updateComponent
   }
   // "touch" every property so they are all tracked as
   // dependencies for deep watching

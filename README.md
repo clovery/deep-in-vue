@@ -25,3 +25,6 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 ```
 
 依赖收集
+
+
+将 `html` 模版转换为 `render` 方法
