@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+</head>
+<body>
+<div id="app">
+  <ul>
+    <li v-for="(item, i) in fruits" :key="i">{{ item }}</li>
+  </ul>
+  <ul>
+    <li v-for="(item, i) in 3" :key="i">{{ item }}</li>
+  </ul>
+  <ul>
+    <li v-for="(item, i) in 'hello'" :key="i">{{ item }}</li>
+  </ul>
+</div>
+<script src="../../vue/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        fruits: [
+          'apple',
+          'orange'
+        ]
+      }
+    }
+  })
+</script>
+</body>
+</html>

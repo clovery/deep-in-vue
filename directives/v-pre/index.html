@@ -5,11 +5,9 @@
 </head>
 <body>
 <div id="app">
-  <span v-text="message">
-    <br />
-  </span>
+  <span v-pre>{{ this will not be compiled }}</span>
 </div>
-<script src="../vue/dist/vue.js"></script>
+<script src="../../vue/dist/vue.js"></script>
 <script>
 var app = new Vue({
   el: '#app',

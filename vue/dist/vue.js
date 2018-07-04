@@ -2070,7 +2070,7 @@ function mountComponent (
   hydrating
 ) {
   vm.$el = el;
-  if (!vm.$options.render) {
+  if (!vm.$options.render) { // 创建空的 VNode
     vm.$options.render = createEmptyVNode;
     {
       /* istanbul ignore if */
@@ -2109,6 +2109,7 @@ function mountComponent (
     };
   } else {
     updateComponent = function () {
+      // vm._render 方法中调用动态生成的 render 方法
       vm._update(vm._render(), hydrating);
     };
   }
@@ -3291,17 +3292,17 @@ function renderList (
   render
 ) {
   var ret, i, l, keys, key;
-  if (Array.isArray(val) || typeof val === 'string') {
+  if (Array.isArray(val) || typeof val === 'string') { // 数组或字符串
     ret = new Array(val.length);
     for (i = 0, l = val.length; i < l; i++) {
       ret[i] = render(val[i], i);
     }
-  } else if (typeof val === 'number') {
+  } else if (typeof val === 'number') { // 数字
     ret = new Array(val);
     for (i = 0; i < val; i++) {
       ret[i] = render(i + 1, i);
     }
-  } else if (isObject(val)) {
+  } else if (isObject(val)) { // 对象
     keys = Object.keys(val);
     ret = new Array(keys.length);
     for (i = 0, l = keys.length; i < l; i++) {
@@ -3482,6 +3483,7 @@ function initRender (vm) {
   // so that we get proper render context inside it.
   // args order: tag, data, children, normalizationType, alwaysNormalize
   // internal version is used by render functions compiled from templates
+  // 生成的 render 函数调用该方法
   vm._c = function (a, b, c, d) {
     return createElement(vm, a, b, c, d, false);
   };
@@ -3500,7 +3502,7 @@ function renderMixin (Vue) {
     var ref = vm.$options;
     var render = ref.render;
     var staticRenderFns = ref.staticRenderFns;
-    var _parentVnode = ref._parentVnode;
+    var _parentVnode = ref._parentVnode; // 获取父 VNode
 
     if (vm._isMounted) {
       // clone slot nodes on re-renders
@@ -3520,7 +3522,7 @@ function renderMixin (Vue) {
     // render self
     var vnode;
     try {
-      // 调用生成的 render 方法
+      // 调用生成的 render 方法，返回 VNode 实例
       vnode = render.call(vm._renderProxy, vm.$createElement);
     } catch (e) {
       handleError(e, vm, "render function");
@@ -7351,6 +7353,7 @@ function parseHTML (html, options) {
         }
 
         // End tag:
+        // 处理结束标签
         var endTagMatch = html.match(endTag);
         if (endTagMatch) {
           var curIndex = index;
@@ -7391,7 +7394,7 @@ function parseHTML (html, options) {
         html = '';
       }
 
-      if (options.chars && text) {
+     if (options.chars && text) {
         options.chars(text);
       }
     } else {
@@ -7456,7 +7459,7 @@ function parseHTML (html, options) {
   }
 
   function handleStartTag (match) {
-    var tagName = match.tagName;
+    var tagName = match.tagName; // 标签名称
     var unarySlash = match.unarySlash;
 
     if (expectHTML) {
@@ -7470,6 +7473,7 @@ function parseHTML (html, options) {
 
     var unary = isUnaryTag$$1(tagName) || tagName === 'html' && lastTag === 'head' || !!unarySlash;
 
+    // 处理 attributes，处理成 [{ name: '', value: '' }] 形式
     var l = match.attrs.length;
     var attrs = new Array(l);
     for (var i = 0; i < l; i++) {
@@ -7762,13 +7766,16 @@ function parse (
         }
       }
       if (currentParent && !element.forbidden) {
-        if (element.elseif || element.else) {
+        // v-if 表达式可以看作一个 element
+        // 处理 elseif 或 else
+        // v-if 的 el 的 ifConditions 数组，成员依次为 v-if、v-else-if、v-else
+        if (element.elseif || element.else) { 
           processIfConditions(element, currentParent);
         } else if (element.slotScope) { // scoped slot
           currentParent.plain = false;
           var name = element.slotTarget || '"default"';(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
         } else {
-          // push 子元素到 children
+          // push 子元素
           currentParent.children.push(element);
           element.parent = currentParent;
         }
@@ -7786,7 +7793,7 @@ function parse (
     },
 
     end: function end () {
-      // remove trailing whitespace
+      // remove trailing whitespace 删除尾部空白字符
       var element = stack[stack.length - 1];
       var lastNode = element.children[element.children.length - 1];
       if (lastNode && lastNode.type === 3 && lastNode.text === ' ' && !inPre) {
@@ -7905,8 +7912,10 @@ function processFor (el) {
   }
 }
 
+// 如果遇到 v-if 属性，表达式添加到 el 的 ifConditions
+// v-else 和 v-else-if 则打上对应的标记
 function processIf (el) {
-  var exp = getAndRemoveAttr(el, 'v-if');
+  var exp = getAndRemoveAttr(el, 'v-if'); // 获取 v-if 的表达式
   if (exp) {
     el.if = exp;
     addIfCondition(el, {
@@ -7925,9 +7934,9 @@ function processIf (el) {
 }
 
 function processIfConditions (el, parent) {
-  var prev = findPrevElement(parent.children);
+  var prev = findPrevElement(parent.children); // 查找 v-if 的 element
   if (prev && prev.if) {
-    addIfCondition(prev, {
+    addIfCondition(prev, { // 添加到 ifConditions
       exp: el.elseif,
       block: el
     });

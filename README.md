@@ -28,3 +28,8 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 
 
 将 `html` 模版转换为 `render` 方法
+
+1. html 模版解析成 ast
+2. ast 生成 render
+3. render 返回 vnode
+4. vm.__patch__ 更新 UI

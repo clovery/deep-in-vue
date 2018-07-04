@@ -5,16 +5,17 @@
 </head>
 <body>
 <div id="app">
-  <div v-if="visible">{{ message }}</div>
+  <div v-if="magic === 1">One</div>
+  <div v-else-if="magic === 2">Two</div>
+  <div v-else>Three</div>
 </div>
-<script src="../vue/dist/vue.js"></script>
+<script src="../../vue/dist/vue.js"></script>
 <script>
-  new Vue({
+  const app = new Vue({
     el: '#app',
     data() {
       return {
-        visible: true,
-        message: 'Hello Vue!'
+        magic: 1
       }
     }
   })
