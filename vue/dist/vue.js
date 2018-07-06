@@ -1985,10 +1985,10 @@ function lifecycleMixin (Vue) {
       callHook(vm, 'beforeUpdate');
     }
     var prevEl = vm.$el;
-    var prevVnode = vm._vnode;
+    var prevVnode = vm._vnode; // 旧的 vnode
     var prevActiveInstance = activeInstance;
     activeInstance = vm;
-    vm._vnode = vnode;
+    vm._vnode = vnode; // 新的 vnode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
@@ -4521,6 +4521,7 @@ function createPatchFunction (backend) {
       vnode.elm = nodeOps.createComment(vnode.text);
       insert(parentElm, vnode.elm, refElm);
     } else {
+      // 创建文本节点，添加到父节点
       vnode.elm = nodeOps.createTextNode(vnode.text);
       insert(parentElm, vnode.elm, refElm);
     }
@@ -4596,12 +4597,14 @@ function createPatchFunction (backend) {
     }
   }
 
+  // 创建子节点
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
       for (var i = 0; i < children.length; ++i) {
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true);
       }
     } else if (isPrimitive(vnode.text)) {
+      // 直接调用 dom 操作，添加子节点
       nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(vnode.text));
     }
   }
@@ -4721,10 +4724,10 @@ function createPatchFunction (backend) {
   function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
     var oldStartIdx = 0;
     var newStartIdx = 0;
-    var oldEndIdx = oldCh.length - 1;
+    var oldEndIdx = oldCh.length - 1; // 旧的 children 结束索引
     var oldStartVnode = oldCh[0];
     var oldEndVnode = oldCh[oldEndIdx];
-    var newEndIdx = newCh.length - 1;
+    var newEndIdx = newCh.length - 1; // 新的 children 结束索引
     var newStartVnode = newCh[0];
     var newEndVnode = newCh[newEndIdx];
     var oldKeyToIdx, idxInOld, elmToMove, refElm;
@@ -4734,25 +4737,30 @@ function createPatchFunction (backend) {
     // during leaving transitions
     var canMove = !removeOnly;
 
+    // 保证索引不会越界
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx]; // Vnode has been moved left
       } else if (isUndef(oldEndVnode)) {
         oldEndVnode = oldCh[--oldEndIdx];
       } else if (sameVnode(oldStartVnode, newStartVnode)) {
+        // 起始索引相同的 vnode
         patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue);
         oldStartVnode = oldCh[++oldStartIdx];
         newStartVnode = newCh[++newStartIdx];
       } else if (sameVnode(oldEndVnode, newEndVnode)) {
+        // 结束索引相同的 vnode
         patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue);
         oldEndVnode = oldCh[--oldEndIdx];
         newEndVnode = newCh[--newEndIdx];
-      } else if (sameVnode(oldStartVnode, newEndVnode)) { // Vnode moved right
+      } else if (sameVnode(oldStartVnode, newEndVnode)) {
+        // 旧的起始索引和新的结束索引的 Vnode 相同，Vnode moved right Vnode 移到了右边
         patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue);
         canMove && nodeOps.insertBefore(parentElm, oldStartVnode.elm, nodeOps.nextSibling(oldEndVnode.elm));
         oldStartVnode = oldCh[++oldStartIdx];
         newEndVnode = newCh[--newEndIdx];
       } else if (sameVnode(oldEndVnode, newStartVnode)) { // Vnode moved left
+        // 旧的结束索引和新的起始索引的 Vnode 相同，VNode 移到了左边
         patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue);
         canMove && nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm);
         oldEndVnode = oldCh[--oldEndIdx];
@@ -4793,6 +4801,7 @@ function createPatchFunction (backend) {
     }
   }
 
+  // 对比 vnode
   function patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
     if (oldVnode === vnode) {
       return
@@ -4816,24 +4825,37 @@ function createPatchFunction (backend) {
       i(oldVnode, vnode);
     }
     var elm = vnode.elm = oldVnode.elm;
-    var oldCh = oldVnode.children;
+    var oldCh = oldVnode.children; // 获取 vnode 的 children
     var ch = vnode.children;
-    if (hasData && isPatchable(vnode)) {
-      for (i = 0; i < cbs.update.length; ++i) { cbs.update[i](oldVnode, vnode); }
-      if (isDef(i = data.hook) && isDef(i = i.update)) { i(oldVnode, vnode); }
+    if (hasData && isPatchable(vnode)) { // 判断 vnode 是否需要更新
+      for (i = 0; i < cbs.update.length; ++i) {
+        // updateAttrs, updateClass,
+        // updateDOMListeners, updateDOMProps, updateStyle,
+        // update, updateDirectives
+        cbs.update[i](oldVnode, vnode);
+      }
+
+      if (isDef(i = data.hook) && isDef(i = i.update)) {
+        i(oldVnode, vnode);
+      }
     }
-    if (isUndef(vnode.text)) {
-      if (isDef(oldCh) && isDef(ch)) {
-        if (oldCh !== ch) { updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly); }
-      } else if (isDef(ch)) {
-        if (isDef(oldVnode.text)) { nodeOps.setTextContent(elm, ''); }
+
+    if (isUndef(vnode.text)) { // 节点文本
+      if (isDef(oldCh) && isDef(ch)) { // 新旧 Vnode 都有 children
+        if (oldCh !== ch) {
+          updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly);
+        }
+      } else if (isDef(ch)) { // 只有新 Vnode 有 children
+        if (isDef(oldVnode.text)) {
+          nodeOps.setTextContent(elm, '');
+        }
         addVnodes(elm, null, ch, 0, ch.length - 1, insertedVnodeQueue);
-      } else if (isDef(oldCh)) {
+      } else if (isDef(oldCh)) { // 只有旧 Vnode 有 children
         removeVnodes(elm, oldCh, 0, oldCh.length - 1);
       } else if (isDef(oldVnode.text)) {
         nodeOps.setTextContent(elm, '');
       }
-    } else if (oldVnode.text !== vnode.text) {
+    } else if (oldVnode.text !== vnode.text) { // 新旧节点文本不同
       nodeOps.setTextContent(elm, vnode.text);
     }
     if (hasData) {
@@ -4947,6 +4969,7 @@ function createPatchFunction (backend) {
     } else {
       // 判断是否是 dom 元素
       var isRealElement = isDef(oldVnode.nodeType);
+      // 相同的 vnode
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
         // patch existing root node
         patchVnode(oldVnode, vnode, insertedVnodeQueue, removeOnly);
@@ -7166,6 +7189,7 @@ extend(Vue$3.options.directives, platformDirectives);
 extend(Vue$3.options.components, platformComponents);
 
 // install platform patch function
+// 调用 createPatchFunction 返回 patch 方法
 Vue$3.prototype.__patch__ = inBrowser ? patch : noop;
 
 // public mount method
@@ -9126,9 +9150,10 @@ Vue$3.prototype.$mount = function (
   el,
   hydrating
 ) {
-  el = el && query(el);
+  el = el && query(el); // 根节点
 
   /* istanbul ignore if */
+  // 排除 html、 body 标签
   if (el === document.body || el === document.documentElement) {
     "development" !== 'production' && warn(
       "Do not mount Vue to <html> or <body> - mount to normal elements instead."
@@ -9169,6 +9194,7 @@ Vue$3.prototype.$mount = function (
         perf.mark('compile');
       }
 
+      // 生成 render 函数
       var ref = compileToFunctions(template, {
         shouldDecodeNewlines: shouldDecodeNewlines,
         delimiters: options.delimiters

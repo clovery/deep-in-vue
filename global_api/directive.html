@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+</head>
+<body>
+<div id="app">
+  <div my-directive></div>
+</div>
+<script src="../vue/dist/vue.js"></script>
+<script>
+Vue.directive('my-directive', {
+  bind: function () {},
+  inserted: function () {},
+  update: function () {},
+  componentUpdated: function () {},
+  unbind: function () {}
+})
+
+const app = new Vue({
+  el: '#app'
+})
+</script>
+</body>
+</html>
+

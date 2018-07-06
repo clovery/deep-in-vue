@@ -37,7 +37,7 @@ export default class Dep {
     // stablize the subscriber list first
     const subs = this.subs.slice()
     for (let i = 0, l = subs.length; i < l; i++) {
-      subs[i].update()
+      subs[i].update() // 调用 subscriber 的 update 方法
     }
   }
 }

@@ -33,3 +33,8 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 2. ast 生成 render
 3. render 返回 vnode
 4. vm.__patch__ 更新 UI
+
+# todos
+
+[] 数据(data) 处理
+[] 计算数据(computed) 处理

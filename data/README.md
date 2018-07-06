@@ -1,5 +1,14 @@
 ## 数据初始化
 
+取值操作：
+
+利用 JavaScript 的 Object.defineProperty 方法来定义属性，依赖该属性执行取值操作时收集该依赖对象，存放到属性的私有对象 dep.subs 数组中。
+
+值更新操作：
+
+调用 dep.notify() 通知 subs 执行更新操作。
+
+
 ```
 initState
   -> initData

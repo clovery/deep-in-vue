@@ -134,7 +134,7 @@ export function defineReactive (
   val: any,
   customSetter?: Function
 ) {
-  const dep = new Dep()
+  const dep = new Dep() // dep 私有属性
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
