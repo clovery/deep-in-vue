@@ -48,6 +48,9 @@ export default class Dep {
 Dep.target = null
 const targetStack = []
 
+// 如果 Dep.target 有引用，则 push 到 stack 中
+// Dep.target 则指向当前传入的对象
+// 任何时候只能处理一个 Dep.target，当前 target 处理完之后，依次 stack 中剩余的 target
 export function pushTarget (_target: Watcher) {
   if (Dep.target) targetStack.push(Dep.target)
   Dep.target = _target // 指向当前 watcher 对象

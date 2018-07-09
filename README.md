@@ -38,3 +38,11 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 
 [] 数据(data) 处理
 [] 计算数据(computed) 处理
+
+## 思考方式
+
+关于数据和计算属性
+
+1. 初始化
+2. 更新
+
