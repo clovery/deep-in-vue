@@ -7433,6 +7433,7 @@ function parseHTML (html, options) {
   }
 
   function parseStartTag () {
+    // 匹配开始标签
     var start = html.match(startTagOpen);
     if (start) {
       var match = {
@@ -7440,13 +7441,14 @@ function parseHTML (html, options) {
         attrs: [],
         start: index
       };
-      advance(start[0].length);
+      advance(start[0].length); // 后移 (<tag).length 位
       var end, attr;
+      // 处理标签属性
       while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
         advance(attr[0].length);
         match.attrs.push(attr);
       }
-      if (end) {
+      if (end) { // tag open 结束
         match.unarySlash = end[1];
         advance(end[0].length);
         match.end = index;
