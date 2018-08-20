@@ -1,18 +1,5 @@
 import { IDict } from '../vue.d'
-
-function defineReactive(obj: object, key: string, val: any) {
-  Object.defineProperty(obj, key, {
-    enumerable: true,
-    configurable: true,
-    get: function reactiveGetter() {
-      const value = val
-      console.log(value)
-    },
-    set: function reactiveSetter(newVal) {
-      console.log(newVal)
-    }
-  })
-}
+import defineReactive from './defineReactive'
 
 class Observer {
   constructor(value: any) {

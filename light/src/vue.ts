@@ -1,34 +1,35 @@
-import { IOptions } from './vue.d'
+import { IOptions, IDict } from './vue.d'
 
+import proxy from './proxy'
 import Observer from './observer'
+import Watcher from './observer/watcher'
 
 class Vue {
+  // tslint:disable variable-name
+  public _data!: IDict
+  public _watcher!: Watcher
+
   constructor(options: IOptions) {
     if (options.data) {
       // tslint:disable: no-unused-expression
       new Observer(options.data)
+
+      this._data = options.data
+      Object.keys(options.data).forEach(key => {
+        proxy(this, '_data', key)
+      })
     }
-  }
-}
 
-/*
-const noop = () => { // noop }
+    this.$mount()
+  }
 
-const sharedPropertyDefinition = {
-  enumerable: true,
-  configurable: true,
-  get: noop,
-  set: noop
-}
-function proxy(target: object, sourceKey: any, key: string) {
-  sharedPropertyDefinition.get = function proxyGetter() {
-    return this[sourceKey][key]
+  private $mount() {
+    const updateComponent = () => {
+      // vm._update(vm._render(), hydrating);
+    }
+
+    this._watcher = new Watcher(this, updateComponent, () => {/* */})
   }
-  sharedPropertyDefinition.set = function proxySetter(val: string) {
-    this[sourceKey][key] = val;
-  }
-  Object.defineProperty(target, key, sharedPropertyDefinition)
 }
-*/
 
 export default Vue

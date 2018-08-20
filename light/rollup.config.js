@@ -15,8 +15,8 @@ export default {
       name: "Vue",
       format: "umd",
       file: "./dist/vue.js",
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ],
 
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
