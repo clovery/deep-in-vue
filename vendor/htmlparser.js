@@ -117,8 +117,9 @@
 				parseEndTag( "", stack.last() );
 			}
 
-			if ( html == last )
+			if ( html == last ) {
 				throw "Parse Error: " + html;
+			}
 			last = html;
 		}
 		

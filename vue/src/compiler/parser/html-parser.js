@@ -223,6 +223,7 @@ export function parseHTML (html, options) {
 
     const unary = isUnaryTag(tagName) || tagName === 'html' && lastTag === 'head' || !!unarySlash
 
+    // 处理 attributes，处理成 [{ name: '', value: '' }] 形式
     const l = match.attrs.length
     const attrs = new Array(l)
     for (let i = 0; i < l; i++) {

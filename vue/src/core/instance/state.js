@@ -140,15 +140,17 @@ function initComputed (vm: Component, computed: Object) {
   const watchers = vm._computedWatchers = Object.create(null)
 
   for (const key in computed) {
-    const userDef = computed[key]
+    const userDef = computed[key] // 用户定义的方法
     const getter = typeof userDef === 'function' ? userDef : userDef.get
     // create internal watcher for the computed property.
     watchers[key] = new Watcher(vm, getter, noop, computedWatcherOptions)
+    // 初始化不会执行 watcher.get，依赖的数据更新时才会调用 get
 
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
     if (!(key in vm)) {
+      // 挂载到 vm 实例上，可直接访问数据
       defineComputed(vm, key, userDef)
     }
   }
@@ -175,9 +177,15 @@ function createComputedGetter (key) {
   return function computedGetter () {
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
+      // watcher 初始化时，lazy: false，则 dirty 被设置成 true
       if (watcher.dirty) {
-        watcher.evaluate()
+        watcher.evaluate() // 计算更新值，dirty 设置为 false
+        // 同时进入到 data 的 getter 方法
+        // dep.notify() 执行，调用 watcher.update 之后，dirty 被设置成 true
       }
+      // 如果此时有 Dep.target 对象，push 到该 watcher 的 deps 的 subs 数组中
+      // 当被依赖的数据发生变更时，也要通知 vm._watcher，vm._update(vm._render()) 作为最终的消费者，
+      // 才能触发计算属性的 getter
       if (Dep.target) {
         watcher.depend()
       }
@@ -189,6 +197,7 @@ function createComputedGetter (key) {
 function initMethods (vm: Component, methods: Object) {
   const props = vm.$options.props
   for (const key in methods) {
+    // 1. 只提供名字，用缺省方法 2. 处理方法，上下文指向 vm
     vm[key] = methods[key] == null ? noop : bind(methods[key], vm)
     if (process.env.NODE_ENV !== 'production') {
       if (methods[key] == null) {

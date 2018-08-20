@@ -6,18 +6,21 @@
 <body>
 <div id="app">
   {{ message }}
-  <input v-model="name" />
 </div>
 <script src="../vue/dist/vue.js"></script>
 <script>
 var app = new Vue({
   el: '#app',
   data: {
-    name: 'Vue'
+    name: 'Vue',
+    year: '2018'
   },
   computed: {
     message() {
-      return `Hello ${this.name}!`
+      return `Hello ${this.message2} !`
+    },
+    message2() {
+      return `${this.name} ${this.year}`
     }
   }
 })
