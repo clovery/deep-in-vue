@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+</head>
+<body>
+<div id="app">
+  {{ message }}
+  <input v-model="message" />
+</div>
+<script src="../vue/dist/vue.js"></script>
+<script>
+  const mixins = {
+    created() {
+      console.log('created')
+    }
+  }
+
+  var app = new Vue({
+    mixins: [mixins],
+    el: '#app',
+    data: {
+      message: 'Hello Vue!'
+    }
+  })
+</script>
+</body>
+</html>

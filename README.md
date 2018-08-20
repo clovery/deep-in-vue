@@ -34,6 +34,11 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 3. render 返回 vnode
 4. vm.__patch__ 更新 UI
 
+
+## html 模版解析为 ast
+
+代码在 `src/compiler/parser`
+
 # todos
 
 [] 数据(data) 处理
@@ -45,4 +50,3 @@ vm._watcher = new Watcher(vm, updateComponent, noop);
 
 1. 初始化
 2. 更新
-
